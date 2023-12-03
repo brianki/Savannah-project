@@ -12,12 +12,14 @@ variables:
 before_script:
   - apt-get update -qy
   - apt-get install -y python3-pip
-  - pip3 install awscli
+  - pip3 install --upgrade pipx
 
 build-job:
   stage: build
   script:
     - echo "Building the application..."
+    - pipx install awscli
+    - aws --version  # Check AWS CLI version for debugging
     - echo "Build complete."
 
 unit-test-job:
@@ -46,4 +48,3 @@ deploy-job:
     - echo "Deploy complete."
   only:
     - master
-
