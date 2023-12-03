@@ -43,9 +43,9 @@ deploy-job:
   script:
     - echo "Deploying application to AWS EC2..."
     - echo "Copying artifacts to EC2 instance..."
-    - aws s3 sync savannah-web-page/ s3://storage-2-brian/savannah-web-page/
+    - aws s3 sync savannah-web-page/ s3://storage-2-brian/gitlab/
     - echo "Starting EC2 instance..."
     - aws ec2 start-instances --instance-ids $AWS_INSTANCE_ID
     - echo "Deploy complete."
   only:
-    - master
+    - main
