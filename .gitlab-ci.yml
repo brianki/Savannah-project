@@ -48,4 +48,4 @@ deploy-job:
     - aws ec2 start-instances --instance-ids $AWS_INSTANCE_ID
     - echo "Deploy complete."
   only:
-    - master
+    - main
