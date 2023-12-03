@@ -1,88 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savannah Informatics Simple Web Page</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #673AB7;
-            color: #fff;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin: 0;
-        }
-
-        main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: #673AB7;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #CDDC39;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        form {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input {
-            padding: 10px;
-            margin-bottom: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #673AB7;
-            color: #fff;
-            padding: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-        }
-    </style>
+    <!-- ... (your existing head content) ... -->
 </head>
 <body>
     <header>
@@ -93,7 +12,11 @@
         <h2>Users</h2>
         <ul>
             <% users.forEach(user => { %>
-                <li><%= user.name %></li>
+                <li>
+                    <%= user.name %>
+                    <!-- Add a delete button with a data attribute for user ID -->
+                    <button class="delete-user" data-user-id="<%= user.id %>">Delete</button>
+                </li>
             <% }); %>
         </ul>
 
@@ -103,6 +26,39 @@
             <button type="submit">Submit</button>
         </form>
     </main>
+
+    <!-- Add a script to handle the delete operation using JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add an event listener for the delete buttons
+            document.querySelectorAll('.delete-user').forEach((deleteButton) => {
+                deleteButton.addEventListener('click', async (event) => {
+                    event.preventDefault();
+
+                    const userId = deleteButton.dataset.userId;
+
+                    try {
+                        // Make an AJAX request to delete the user
+                        const response = await fetch(`/users/${userId}`, {
+                            method: 'DELETE',
+                        });
+
+                        if (response.ok) {
+                            // Remove the deleted user entry from the UI
+                            deleteButton.parentElement.remove();
+                            alert('User deleted successfully');
+                        } else {
+                            const errorData = await response.json();
+                            alert(`Error: ${errorData.message}`);
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('An error occurred while deleting the user');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 

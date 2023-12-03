@@ -39,6 +39,24 @@ app.post('/users', (req, res) => {
   }
 });
 
+// NEW ROUTE: Handle DELETE requests to delete a user by ID
+app.delete('/users/:id', (req, res) => {
+  const userId = req.params.id;
+
+  if (!userId) {
+    return res.status(400).send('Bad Request: User ID is required');
+  }
+
+  db.run('DELETE FROM users WHERE id = ?', [userId], (err) => {
+    if (err) {
+      console.error(err.message);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json({ message: 'User deleted successfully' });
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
